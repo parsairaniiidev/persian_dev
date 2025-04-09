@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <article class="article-detail">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>{{ article.title }}</h1>
+            {% if user == article.author or user.is_staff %}
+            <a href="{% url 'article_edit' article.slug %}" class="btn btn-sm btn-outline-primary">
+                ویرایش
+            </a>
+            {% endif %}
+        </div>
+        
+        <div class="article-meta mb-4">
+            <div class="d-flex align-items-center">
+                <img src="{{ article.author.profile.avatar.url }}" 
+                     alt="{{ article.author.get_full_name }}"
+                     class="rounded-circle me-2" width="40" height="40">
+                <div>
+                    <span class="d-block">{{ article.author.get_full_name }}</span>
+                    <span class="text-muted small">
+                        منتشر شده در {{ article.published_at|date:"Y/m/d" }} |
+                        آخرین ویرایش: {{ article.updated_at|date:"Y/m/d" }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="article-tags mb-4">
+            {% for tag in article.tags.all %}
+            <span class="badge bg-secondary me-1">{{ tag.name }}</span>
+            {% endfor %}
+        </div>
+        
+        <div class="article-content mb-5">
+            {{ article.content|linebreaks }}
+        </div>
+        
+        <div class="article-footer text-muted small mb-5">
+            <span class="me-3">
+                <i class="fas fa-eye"></i> {{ article.view_count }} بازدید
+            </span>
+            <span>
+                <i class="fas fa-comment"></i> {{ article.comments.count }} نظر
+            </span>
+        </div>
+        
+        {% include "articles/partials/comments.html" %}
+    </article>
+</div>
+{% endblock %}

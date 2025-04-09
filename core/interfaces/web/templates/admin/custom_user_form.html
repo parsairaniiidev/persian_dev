@@ -1,0 +1,21 @@
+{% extends "admin/change_form.html" %}
+
+{% block extrahead %}
+{{ block.super }}
+<style>
+    /* استایل‌های سفارشی برای پنل مدیریت */
+    .field-username, .field-email {
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block field_sets %}
+<div class="custom-user-form">
+    {% for fieldset in adminform %}
+        {% include "admin/includes/fieldset.html" %}
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}{% if form.instance.pk %}ویرایش{% else %}ایجاد{% endif %} مقاله{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4">{% if form.instance.pk %}ویرایش مقاله{% else %}مقاله جدید{% endif %}</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <div class="mb-3">
+            {{ form.title.label_tag }}
+            {{ form.title }}
+            {% if form.title.errors %}
+            <div class="invalid-feedback d-block">
+                {{ form.title.errors }}
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="mb-3">
+            {{ form.content.label_tag }}
+            {{ form.content }}
+            {% if form.content.errors %}
+            <div class="invalid-feedback d-block">
+                {{ form.content.errors }}
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                {{ form.status.label_tag }}
+                {{ form.status }}
+            </div>
+            <div class="col-md-6 mb-3">
+                {{ form.tags.label_tag }}
+                {{ form.tags }}
+                <small class="text-muted">تگ‌ها را با کاما جدا کنید</small>
+            </div>
+        </div>
+        
+        <div class="mb-3">
+            {{ form.categories.label_tag }}
+            <div class="category-checkboxes">
+                {{ form.categories }}
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">
+                {% if form.instance.pk %}ذخیره تغییرات{% else %}ایجاد مقاله{% endif %}
+            </button>
+            
+            {% if form.instance.pk %}
+            <a href="{% url 'article_detail' form.instance.slug %}" class="btn btn-outline-secondary">
+                انصراف
+            </a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+{% block extra_js %}
+<script>
+    // فعال کردن ویرایشگر متن پیشرفته
+    ClassicEditor
+        .create(document.querySelector('#id_content'))
+        .catch(error => {
+            console.error(error);
+        });
+</script>
+{% endblock %}
+{% endblock %}
